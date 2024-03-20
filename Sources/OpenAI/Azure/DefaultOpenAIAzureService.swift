@@ -42,7 +42,7 @@ final public class DefaultOpenAIAzureService: OpenAIService {
       var chatParameters = parameters
       chatParameters.stream = false
       let queryItems: [URLQueryItem]  = [.init(name: "api-version", value: apiVersion)]
-      let request = try AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
+      let request = try await AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
          apiKey: apiKey,
          organizationID: nil,
          method: .post,
@@ -55,7 +55,7 @@ final public class DefaultOpenAIAzureService: OpenAIService {
       var chatParameters = parameters
       chatParameters.stream = true
       let queryItems: [URLQueryItem]  = [.init(name: "api-version", value: apiVersion)]
-      let request = try AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
+      let request = try await AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
          apiKey: apiKey,
          organizationID: nil,
          method: .post,

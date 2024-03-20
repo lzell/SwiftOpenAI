@@ -1,0 +1,3 @@
+OpenAIAPI conforms to Endpoint.
+
+One approach could be to conditionally switch the `base` getter in Endpoint AND conditionally change the headers in Endpoint#request

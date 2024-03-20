@@ -116,7 +116,8 @@ enum OpenAIAPI {
 extension OpenAIAPI: Endpoint {
    
    var base: String {
-      "https://api.openai.com"
+      // "https://api.openai.com"
+       "https://api.aiproxy.pro"
    }
    
    var path: String {
