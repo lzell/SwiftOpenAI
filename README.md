@@ -15,11 +15,12 @@ An open-source Swift package designed for effortless interaction with OpenAI's p
 - [Getting an API Key](#getting-an-api-key)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Azure OpenAI](#azure-openAI)
 - [Collaboration](#collaboration)
 
 ## Description
 
-`SwiftOpenAI` is an open-source Swift package that streamlines interactions with **all** OpenAI's API endpoints.
+`SwiftOpenAI` is an open-source Swift package that streamlines interactions with **all** OpenAI's API endpoints, now with added support for Azure and Assistant stream APIs. 
 
 ### OpenAI ENDPOINTS
 
@@ -45,8 +46,10 @@ An open-source Swift package designed for effortless interaction with OpenAI's p
    - [Message File Object](#message-file-object)
 - [Runs](#runs)
    - [Run Step object](#run-step-object)
-   
-### [Azure OpenAI](#azure-openAI)
+   - [Run Step details](#run-step-details)
+- [Assistants Streaming](#assistants-streaming)
+   - [Message Delta Object](#message-delta-object)
+   - [Run Step Delta Object](#run-step-delta-object)
 
 ## Getting an API Key
 
@@ -1880,6 +1883,8 @@ Parameters
 /// [Creates an assistant file.](https://platform.openai.com/docs/api-reference/assistants/createAssistantFile)
 public struct AssistantFileParamaters: Encodable {
    
+   /// The ID of the assistant for which to create a File.
+   let assistantID: String
    /// A [File](https://platform.openai.com/docs/api-reference/files) ID (with purpose="assistants") that the assistant should use.
    /// Useful for tools like retrieval and code_interpreter that can access files.
    let fileID: String
@@ -2072,9 +2077,9 @@ public struct MessageObject: Codable {
    }
 }
 
-// MARK: Content
+// MARK: MessageContent
 
-public enum Content: Codable {
+public enum MessageContent: Codable {
    
    case imageFile(ImageFile)
    case text(Text)
@@ -2243,6 +2248,8 @@ public struct RunParameter: Encodable {
    let tools: [AssistantObject.Tool]?
    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
    let metadata: [String: String]?
+   /// If true, returns a stream of events that happen during the Run as server-sent events, terminating when the Run enters a terminal state with a data: [DONE] message.
+   var stream: Bool
 }
 ```
 [Modify a Run](https://platform.openai.com/docs/api-reference/runs/modifyRun)
@@ -2275,6 +2282,8 @@ public struct CreateThreadAndRunParameter: Encodable {
    let tools: [AssistantObject.Tool]?
    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
    let metadata: [String: String]?
+   /// If true, returns a stream of events that happen during the Run as server-sent events, terminating when the Run enters a terminal state with a data: [DONE] message.
+   let stream: Bool
 }
 ```
 [Submit tool outputs to run](https://platform.openai.com/docs/api-reference/runs/submitToolOutputs)
@@ -2283,6 +2292,8 @@ public struct RunToolsOutputParameter: Encodable {
    
    /// A list of tools for which the outputs are being submitted.
    public let toolOutputs: [ToolOutput]
+   /// If true, returns a stream of events that happen during the Run as server-sent events, terminating when the Run enters a terminal state with a data: [DONE] message.
+   public let stream: Bool
 }
 ```
    
@@ -2401,7 +2412,7 @@ public struct RunStepObject: Decodable {
    /// The status of the run step, which can be either in_progress, cancelled, failed, completed, or expired.
    public let status: String
    /// The details of the run step.
-   public let stepDetails: StepDetail
+   public let stepDetails: RunStepDetails
    /// The last error associated with this run step. Will be null if there are no errors.
    public let lastError: RunObject.LastError?
    /// The Unix timestamp (in seconds) for when the run step expired. A step is considered expired if the parent run is expired.
@@ -2414,6 +2425,8 @@ public struct RunStepObject: Decodable {
    public let completedAt: Int?
    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
    public let metadata: [String: String]?
+   /// Usage statistics related to the run step. This value will be null while the run step's status is in_progress.
+   public let usage: Usage?
 }
 ```
 Usage
@@ -2431,7 +2444,177 @@ let runID = "run_abc123"
 let runSteps = try await service.listRunSteps(threadID: threadID, runID: runID, limit: nil, order: nil, after: nil, before: nil) 
 ```
 
-### Azure OpenAI
+### Run Step Detail
+
+The details of the run step.
+
+```swift
+public struct RunStepDetails: Codable {
+   
+   /// `message_creation` or `tool_calls`
+   public let type: String
+   /// Details of the message creation by the run step.
+   public let messageCreation: MessageCreation?
+   /// Details of the tool call.
+   public let toolCalls: [ToolCall]?
+}
+```
+
+### Assistants Streaming
+
+Assistants API [streaming.](https://platform.openai.com/docs/api-reference/assistants-streaming)
+
+Stream the result of executing a Run or resuming a Run after submitting tool outputs.
+
+You can stream events from the [Create Thread and Run](https://platform.openai.com/docs/api-reference/runs/createThreadAndRun), [Create Run](https://platform.openai.com/docs/api-reference/runs/createRun), and [Submit Tool Outputs](https://platform.openai.com/docs/api-reference/runs/submitToolOutputs) endpoints by passing "stream": true. The response will be a Server-Sent events stream.
+
+OpenAI Python tutorial(https://platform.openai.com/docs/assistants/overview?context=with-streaming))
+
+### Message Delta Object
+
+[MessageDeltaObject](https://platform.openai.com/docs/api-reference/assistants-streaming/message-delta-object) Represents a message delta i.e. any changed fields on a message during streaming.
+
+```swift
+public struct MessageDeltaObject: Decodable {
+   
+   /// The identifier of the message, which can be referenced in API endpoints.
+   public let id: String
+   /// The object type, which is always thread.message.delta.
+   public let object: String
+   /// The delta containing the fields that have changed on the Message.
+   public let delta: Delta
+   
+   public struct Delta: Decodable {
+      
+      /// The entity that produced the message. One of user or assistant.
+      public let role: String
+      /// The content of the message in array of text and/or images.
+      public let content: [MessageContent]
+      /// A list of [file](https://platform.openai.com/docs/api-reference/files) IDs that the assistant should use. Useful for tools like retrieval and code_interpreter that can access files. A maximum of 10 files can be attached to a message.
+      public let fileIDS: [String]?
+
+      enum Role: String {
+         case user
+         case assistant
+      }
+      
+      enum CodingKeys: String, CodingKey {
+         case role
+         case content
+         case fileIDS = "file_ids"
+      }
+   }
+}
+```
+
+### Run Step Delta Object
+
+Represents a [run step delta](https://platform.openai.com/docs/api-reference/assistants-streaming/run-step-delta-object) i.e. any changed fields on a run step during streaming.
+
+```swift
+public struct RunStepDeltaObject: Decodable {
+   
+   /// The identifier of the run step, which can be referenced in API endpoints.
+   public let id: String
+   /// The object type, which is always thread.run.step.delta.
+   public let object: String
+   /// The delta containing the fields that have changed on the run step.
+   public let delta: Delta
+   
+   public struct Delta: Decodable {
+      
+      /// The details of the run step.
+      public let stepDetails: RunStepDetails
+      
+      private enum CodingKeys: String, CodingKey {
+         case stepDetails = "step_details"
+      }
+   }
+}
+```
+
+⚠️ To utilize the `createRunAndStreamMessage`, first create an assistant and initiate a thread.
+
+Usage
+[Create Run](https://platform.openai.com/docs/api-reference/runs/createRun) with stream.
+
+The `createRunAndStreamMessage` streams [events](https://platform.openai.com/docs/api-reference/assistants-streaming/events), You can decide which one you need for your implementation. For example, this is how you can access message delta and run step delta objects
+
+```swift
+let assistantID = "asst_abc123""
+let threadID = "thread_abc123"
+let messageParameter = MessageParameter(role: .user, content: "Tell me the square root of 1235")
+let message = try await service.createMessage(threadID: threadID, parameters: messageParameter)
+let runParameters = RunParameter(assistantID: assistantID)
+let stream = try await service.createRunAndStreamMessage(threadID: threadID, parameters: runParameters)
+
+         for try await result in stream {
+            switch result {
+            case .threadMessageDelta(let messageDelta):
+               let content = messageDelta.delta.content.first
+               switch content {
+               case .imageFile, nil:
+                  break
+               case .text(let textContent):
+                  print(textContent.text.value) // this will print the streamed response for a message.
+               }
+               
+            case .threadRunStepDelta(let runStepDelta):
+               if let toolCall = runStepDelta.delta.stepDetails.toolCalls?.first?.toolCall {
+                  switch toolCall {
+                  case .codeInterpreterToolCall(let toolCall):
+                     print(toolCall.input ?? "") // this will print the streamed response for code interpreter tool call.
+                  case .retrieveToolCall(let toolCall):
+                     print("Retrieve tool call")
+                  case .functionToolCall(let toolCall):
+                     print("Function tool call")
+                  case nil:
+                     break
+                  }
+               }
+            }
+         }
+```
+
+You can go to the [Examples folder](https://github.com/jamesrochabrun/SwiftOpenAI/tree/main/Examples/SwiftOpenAIExample/SwiftOpenAIExample) in this package, navigate to the 'Configure Assistants' tab, create an assistant, and follow the subsequent steps.
+
+### Stream support has also been added to:
+
+[Create Thread and Run](https://platform.openai.com/docs/api-reference/runs/createThreadAndRun):
+
+```swift
+   /// Creates a thread and run with stream enabled.
+   ///
+   /// - Parameter parameters: The parameters needed to create a thread and run.
+   /// - Returns: An AsyncThrowingStream of [AssistantStreamEvent](https://platform.openai.com/docs/api-reference/assistants-streaming/events) objects.
+   /// - Throws: An error if the request fails.
+   ///
+   /// For more information, refer to [OpenAI's  Run API documentation](https://platform.openai.com/docs/api-reference/runs/createThreadAndRun).
+   func createThreadAndRunStream(
+      parameters: CreateThreadAndRunParameter)
+   async throws -> AsyncThrowingStream<AssistantStreamEvent, Error>
+```
+
+[Submit Tool Outputs](https://platform.openai.com/docs/api-reference/runs/submitToolOutputs):
+
+```swift
+   /// When a run has the status: "requires_action" and required_action.type is submit_tool_outputs, this endpoint can be used to submit the outputs from the tool calls once they're all completed. All outputs must be submitted in a single request. Stream enabled
+   ///
+   /// - Parameter threadID: The ID of the [thread](https://platform.openai.com/docs/api-reference/threads) to which this run belongs.
+   /// - Parameter runID: The ID of the run that requires the tool output submission.
+   /// - Parameter parameters: The parameters needed for the run tools output.
+   /// - Returns: An AsyncThrowingStream of [AssistantStreamEvent](https://platform.openai.com/docs/api-reference/assistants-streaming/events) objects.
+   /// - Throws: An error if the request fails.
+   ///
+   /// For more information, refer to [OpenAI's  Run API documentation](https://platform.openai.com/docs/api-reference/runs/submitToolOutputs).
+   func submitToolOutputsToRunStream(
+      threadID: String,
+      runID: String,
+      parameters: RunToolsOutputParameter)
+   async throws -> AsyncThrowingStream<AssistantStreamEvent, Error>
+```
+
+## Azure OpenAI
 
 This library provides support for both chat completions and chat stream completions through Azure OpenAI. Currently, `DefaultOpenAIAzureService` supports chat completions, including both streamed and non-streamed options.
 
@@ -2468,7 +2651,6 @@ let parameters = ChatCompletionParameters(
                      model: .custom("DEPLOYMENT_NAME") /// The deployment name you chose when you deployed the model. e.g: "gpt-35-turbo-0613"
 let completionObject = try await service.startChat(parameters: parameters)
 ```
-
 
 ### Collaboration
 Open a PR for any proposed change pointing it to `main` branch.

@@ -3,14 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D8C297D2BAB464900E1F588 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0D8C297C2BAB464900E1F588 /* SwiftOpenAI */; };
-		0D8C29872BB2852B00E1F588 /* AIProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8C29862BB2852B00E1F588 /* AIProxy.swift */; };
 		7B1268052B08246400400694 /* AssistantConfigurationDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1268042B08246400400694 /* AssistantConfigurationDemoView.swift */; };
 		7B1268072B08247C00400694 /* AssistantConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1268062B08247C00400694 /* AssistantConfigurationProvider.swift */; };
+		7B3DDCC52BAAA722004B5C96 /* AssistantsListDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3DDCC42BAAA722004B5C96 /* AssistantsListDemoView.swift */; };
+		7B3DDCC72BAAAD34004B5C96 /* AssistantThreadConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3DDCC62BAAAD34004B5C96 /* AssistantThreadConfigurationProvider.swift */; };
+		7B3DDCC92BAAAF96004B5C96 /* AssistantStreamDemoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3DDCC82BAAAF96004B5C96 /* AssistantStreamDemoScreen.swift */; };
+		7B3DDCD22BAE2718004B5C96 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 7B3DDCD12BAE2718004B5C96 /* SwiftOpenAI */; };
 		7B436B962AE24A04003CE281 /* OptionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B436B952AE24A04003CE281 /* OptionsListView.swift */; };
 		7B436B992AE25052003CE281 /* ContentLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B436B982AE25052003CE281 /* ContentLoader.swift */; };
 		7B436B9B2AE25094003CE281 /* narcos.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7B436B9A2AE25093003CE281 /* narcos.m4a */; };
@@ -42,6 +44,8 @@
 		7BA788CF2AE23A48008825D5 /* ApiKeyIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA788CE2AE23A48008825D5 /* ApiKeyIntroView.swift */; };
 		7BA788D12AE23A49008825D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BA788D02AE23A49008825D5 /* Assets.xcassets */; };
 		7BA788D52AE23A49008825D5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BA788D42AE23A49008825D5 /* Preview Assets.xcassets */; };
+		7BA788E92AE23A49008825D5 /* SwiftOpenAIExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA788E82AE23A49008825D5 /* SwiftOpenAIExampleUITests.swift */; };
+		7BA788EB2AE23A49008825D5 /* SwiftOpenAIExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA788EA2AE23A49008825D5 /* SwiftOpenAIExampleUITestsLaunchTests.swift */; };
 		7BA788FC2AE23B42008825D5 /* AudioDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA788FB2AE23B42008825D5 /* AudioDemoView.swift */; };
 		7BA788FE2AE23B95008825D5 /* AudioProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA788FD2AE23B95008825D5 /* AudioProvider.swift */; };
 		7BBE7E912AFCA52A0096A693 /* ChatVisionDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBE7E902AFCA52A0096A693 /* ChatVisionDemoView.swift */; };
@@ -52,12 +56,32 @@
 		7BBE7EAB2B02E8FC0096A693 /* ChatMessageDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBE7EAA2B02E8FC0096A693 /* ChatMessageDisplayModel.swift */; };
 		7BBE7EDE2B03718E0096A693 /* ChatFunctionCallProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBE7EDD2B03718E0096A693 /* ChatFunctionCallProvider.swift */; };
 		7BBE7EE02B0372550096A693 /* ChatFunctionCallDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBE7EDF2B0372550096A693 /* ChatFunctionCallDemoView.swift */; };
+		7BE9A5AF2B0B33E600CE8103 /* SwiftOpenAIExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA788DE2AE23A49008825D5 /* SwiftOpenAIExampleTests.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7BA788DB2AE23A49008825D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BA788C12AE23A48008825D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BA788C82AE23A48008825D5;
+			remoteInfo = SwiftOpenAIExample;
+		};
+		7BA788E52AE23A49008825D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BA788C12AE23A48008825D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BA788C82AE23A48008825D5;
+			remoteInfo = SwiftOpenAIExample;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		0D8C29862BB2852B00E1F588 /* AIProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProxy.swift; sourceTree = "<group>"; };
 		7B1268042B08246400400694 /* AssistantConfigurationDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantConfigurationDemoView.swift; sourceTree = "<group>"; };
 		7B1268062B08247C00400694 /* AssistantConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantConfigurationProvider.swift; sourceTree = "<group>"; };
+		7B3DDCC42BAAA722004B5C96 /* AssistantsListDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantsListDemoView.swift; sourceTree = "<group>"; };
+		7B3DDCC62BAAAD34004B5C96 /* AssistantThreadConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantThreadConfigurationProvider.swift; sourceTree = "<group>"; };
+		7B3DDCC82BAAAF96004B5C96 /* AssistantStreamDemoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantStreamDemoScreen.swift; sourceTree = "<group>"; };
 		7B436B952AE24A04003CE281 /* OptionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsListView.swift; sourceTree = "<group>"; };
 		7B436B982AE25052003CE281 /* ContentLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentLoader.swift; sourceTree = "<group>"; };
 		7B436B9A2AE25093003CE281 /* narcos.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = narcos.m4a; sourceTree = "<group>"; };
@@ -91,7 +115,9 @@
 		7BA788D02AE23A49008825D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7BA788D22AE23A49008825D5 /* SwiftOpenAIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftOpenAIExample.entitlements; sourceTree = "<group>"; };
 		7BA788D42AE23A49008825D5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7BA788DA2AE23A49008825D5 /* SwiftOpenAIExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftOpenAIExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BA788DE2AE23A49008825D5 /* SwiftOpenAIExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftOpenAIExampleTests.swift; sourceTree = "<group>"; };
+		7BA788E42AE23A49008825D5 /* SwiftOpenAIExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftOpenAIExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BA788E82AE23A49008825D5 /* SwiftOpenAIExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftOpenAIExampleUITests.swift; sourceTree = "<group>"; };
 		7BA788EA2AE23A49008825D5 /* SwiftOpenAIExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftOpenAIExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7BA788FB2AE23B42008825D5 /* AudioDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDemoView.swift; sourceTree = "<group>"; };
@@ -111,7 +137,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D8C297D2BAB464900E1F588 /* SwiftOpenAI in Frameworks */,
+				7B3DDCD22BAE2718004B5C96 /* SwiftOpenAI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BA788D72AE23A49008825D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BA788E12AE23A49008825D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +163,9 @@
 			children = (
 				7B1268042B08246400400694 /* AssistantConfigurationDemoView.swift */,
 				7B1268062B08247C00400694 /* AssistantConfigurationProvider.swift */,
+				7B3DDCC42BAAA722004B5C96 /* AssistantsListDemoView.swift */,
+				7B3DDCC62BAAAD34004B5C96 /* AssistantThreadConfigurationProvider.swift */,
+				7B3DDCC82BAAAF96004B5C96 /* AssistantStreamDemoScreen.swift */,
 			);
 			path = Assistants;
 			sourceTree = "<group>";
@@ -261,6 +304,8 @@
 			isa = PBXGroup;
 			children = (
 				7BA788C92AE23A48008825D5 /* SwiftOpenAIExample.app */,
+				7BA788DA2AE23A49008825D5 /* SwiftOpenAIExampleTests.xctest */,
+				7BA788E42AE23A49008825D5 /* SwiftOpenAIExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -285,7 +330,6 @@
 				7B436B9C2AE2515C003CE281 /* Resources */,
 				7B436B972AE25045003CE281 /* Utilities */,
 				7BBE7E922AFCC9300096A693 /* Vision */,
-				0D8C29862BB2852B00E1F588 /* AIProxy.swift */,
 				7BA788CE2AE23A48008825D5 /* ApiKeyIntroView.swift */,
 				7B436B952AE24A04003CE281 /* OptionsListView.swift */,
 				7BA788D02AE23A49008825D5 /* Assets.xcassets */,
@@ -382,11 +426,47 @@
 			);
 			name = SwiftOpenAIExample;
 			packageProductDependencies = (
-				0D8C297C2BAB464900E1F588 /* SwiftOpenAI */,
+				7B3DDCD12BAE2718004B5C96 /* SwiftOpenAI */,
 			);
 			productName = SwiftOpenAIExample;
 			productReference = 7BA788C92AE23A48008825D5 /* SwiftOpenAIExample.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7BA788D92AE23A49008825D5 /* SwiftOpenAIExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BA788F12AE23A49008825D5 /* Build configuration list for PBXNativeTarget "SwiftOpenAIExampleTests" */;
+			buildPhases = (
+				7BA788D62AE23A49008825D5 /* Sources */,
+				7BA788D72AE23A49008825D5 /* Frameworks */,
+				7BA788D82AE23A49008825D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7BA788DC2AE23A49008825D5 /* PBXTargetDependency */,
+			);
+			name = SwiftOpenAIExampleTests;
+			productName = SwiftOpenAIExampleTests;
+			productReference = 7BA788DA2AE23A49008825D5 /* SwiftOpenAIExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7BA788E32AE23A49008825D5 /* SwiftOpenAIExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BA788F42AE23A49008825D5 /* Build configuration list for PBXNativeTarget "SwiftOpenAIExampleUITests" */;
+			buildPhases = (
+				7BA788E02AE23A49008825D5 /* Sources */,
+				7BA788E12AE23A49008825D5 /* Frameworks */,
+				7BA788E22AE23A49008825D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7BA788E62AE23A49008825D5 /* PBXTargetDependency */,
+			);
+			name = SwiftOpenAIExampleUITests;
+			productName = SwiftOpenAIExampleUITests;
+			productReference = 7BA788E42AE23A49008825D5 /* SwiftOpenAIExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -401,6 +481,14 @@
 					7BA788C82AE23A48008825D5 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					7BA788D92AE23A49008825D5 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 7BA788C82AE23A48008825D5;
+					};
+					7BA788E32AE23A49008825D5 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 7BA788C82AE23A48008825D5;
+					};
 				};
 			};
 			buildConfigurationList = 7BA788C42AE23A48008825D5 /* Build configuration list for PBXProject "SwiftOpenAIExample" */;
@@ -413,13 +501,15 @@
 			);
 			mainGroup = 7BA788C02AE23A48008825D5;
 			packageReferences = (
-				0D8C297B2BAB464900E1F588 /* XCLocalSwiftPackageReference "../.." */,
+				7B3DDCD02BAE2718004B5C96 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */,
 			);
 			productRefGroup = 7BA788CA2AE23A48008825D5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				7BA788C82AE23A48008825D5 /* SwiftOpenAIExample */,
+				7BA788D92AE23A49008825D5 /* SwiftOpenAIExampleTests */,
+				7BA788E32AE23A49008825D5 /* SwiftOpenAIExampleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -434,6 +524,20 @@
 				7B436BB42AE79481003CE281 /* WorldCupData.jsonl in Resources */,
 				7B436B9B2AE25094003CE281 /* narcos.m4a in Resources */,
 				7BA788D12AE23A49008825D5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BA788D82AE23A49008825D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BA788E22AE23A49008825D5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,11 +561,13 @@
 				7B436BB72AE7A2EA003CE281 /* ImagesProvider.swift in Sources */,
 				7B436B962AE24A04003CE281 /* OptionsListView.swift in Sources */,
 				7BBE7EDE2B03718E0096A693 /* ChatFunctionCallProvider.swift in Sources */,
-				0D8C29872BB2852B00E1F588 /* AIProxy.swift in Sources */,
 				7B7239A62AF628F800646679 /* ChatDisplayMessageView.swift in Sources */,
 				7B7239A02AF625F200646679 /* ChatFluidConversationProvider.swift in Sources */,
 				7BA788CF2AE23A48008825D5 /* ApiKeyIntroView.swift in Sources */,
 				7BA788CD2AE23A48008825D5 /* SwiftOpenAIExampleApp.swift in Sources */,
+				7B3DDCC52BAAA722004B5C96 /* AssistantsListDemoView.swift in Sources */,
+				7B3DDCC72BAAAD34004B5C96 /* AssistantThreadConfigurationProvider.swift in Sources */,
+				7B3DDCC92BAAAF96004B5C96 /* AssistantStreamDemoScreen.swift in Sources */,
 				7B436BB92AE7A2F2003CE281 /* ImagesDemoView.swift in Sources */,
 				7B436BB22AE79370003CE281 /* FilesProvider.swift in Sources */,
 				7BBE7E942AFCC9640096A693 /* ChatVisionProvider.swift in Sources */,
@@ -486,7 +592,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7BA788D62AE23A49008825D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BE9A5AF2B0B33E600CE8103 /* SwiftOpenAIExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BA788E02AE23A49008825D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BA788E92AE23A49008825D5 /* SwiftOpenAIExampleUITests.swift in Sources */,
+				7BA788EB2AE23A49008825D5 /* SwiftOpenAIExampleUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7BA788DC2AE23A49008825D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BA788C82AE23A48008825D5 /* SwiftOpenAIExample */;
+			targetProxy = 7BA788DB2AE23A49008825D5 /* PBXContainerItemProxy */;
+		};
+		7BA788E62AE23A49008825D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BA788C82AE23A48008825D5 /* SwiftOpenAIExample */;
+			targetProxy = 7BA788E52AE23A49008825D5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7BA788EC2AE23A49008825D5 /* Debug */ = {
@@ -612,7 +748,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftOpenAIExample/Preview Content\"";
-				DEVELOPMENT_TEAM = 9557YJ9D37;
+				DEVELOPMENT_TEAM = CQ45U4X9K3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -631,7 +767,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.hamiltonzell.SwiftOpenAIExample;
+				PRODUCT_BUNDLE_IDENTIFIER = jamesRochabrun.SwiftOpenAIExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -650,7 +786,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftOpenAIExample/Preview Content\"";
-				DEVELOPMENT_TEAM = 9557YJ9D37;
+				DEVELOPMENT_TEAM = CQ45U4X9K3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -669,13 +805,103 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.hamiltonzell.SwiftOpenAIExample;
+				PRODUCT_BUNDLE_IDENTIFIER = jamesRochabrun.SwiftOpenAIExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7BA788F22AE23A49008825D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CQ45U4X9K3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jamesRochabrun.SwiftOpenAIExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftOpenAIExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftOpenAIExample";
+			};
+			name = Debug;
+		};
+		7BA788F32AE23A49008825D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CQ45U4X9K3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jamesRochabrun.SwiftOpenAIExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftOpenAIExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftOpenAIExample";
+			};
+			name = Release;
+		};
+		7BA788F52AE23A49008825D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CQ45U4X9K3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jamesRochabrun.SwiftOpenAIExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SwiftOpenAIExample;
+			};
+			name = Debug;
+		};
+		7BA788F62AE23A49008825D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CQ45U4X9K3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jamesRochabrun.SwiftOpenAIExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SwiftOpenAIExample;
 			};
 			name = Release;
 		};
@@ -700,18 +926,41 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		7BA788F12AE23A49008825D5 /* Build configuration list for PBXNativeTarget "SwiftOpenAIExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BA788F22AE23A49008825D5 /* Debug */,
+				7BA788F32AE23A49008825D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BA788F42AE23A49008825D5 /* Build configuration list for PBXNativeTarget "SwiftOpenAIExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BA788F52AE23A49008825D5 /* Debug */,
+				7BA788F62AE23A49008825D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		0D8C297B2BAB464900E1F588 /* XCLocalSwiftPackageReference "../.." */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../..;
+/* Begin XCRemoteSwiftPackageReference section */
+		7B3DDCD02BAE2718004B5C96 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jamesrochabrun/SwiftOpenAI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0D8C297C2BAB464900E1F588 /* SwiftOpenAI */ = {
+		7B3DDCD12BAE2718004B5C96 /* SwiftOpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 7B3DDCD02BAE2718004B5C96 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */;
 			productName = SwiftOpenAI;
 		};
 /* End XCSwiftPackageProductDependency section */

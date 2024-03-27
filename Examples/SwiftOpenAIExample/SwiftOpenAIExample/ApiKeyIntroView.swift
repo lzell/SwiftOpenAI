@@ -41,9 +41,7 @@ struct ApiKeyIntroView: View {
             .disabled(apiKey.isEmpty)
             Spacer()
             Group {
-                VStack {
-                    Text("If you don't have a valid API KEY yet, you can visit ") + Text("[this link](https://platform.openai.com/account/api-keys)") + Text(" to get started.")
-                }
+               Text("If you don't have a valid API KEY yet, you can visit ") + Text("[this link](https://platform.openai.com/account/api-keys)") + Text(" to get started.")
             }
             .font(.caption)
          }

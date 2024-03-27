@@ -115,11 +115,10 @@ enum OpenAIAPI {
 
 extension OpenAIAPI: Endpoint {
    
-    // TOMORROW, come back to this, quickly do one PR that touches as few lines as possible
-    // THEN do another PR that decouples as much as possible
-    //
-    // Alternatively, see the precedent set by Azure
-
+   var base: String {
+      "https://api.openai.com"
+   }
+   
    var path: String {
       switch self {
       case .assistant(let category):

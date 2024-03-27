@@ -42,7 +42,7 @@ final public class DefaultOpenAIAzureService: OpenAIService {
       var chatParameters = parameters
       chatParameters.stream = false
       let queryItems: [URLQueryItem]  = [.init(name: "api-version", value: apiVersion)]
-      let request = try await AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
+      let request = try AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
          apiKey: apiKey,
          organizationID: nil,
          method: .post,
@@ -55,7 +55,7 @@ final public class DefaultOpenAIAzureService: OpenAIService {
       var chatParameters = parameters
       chatParameters.stream = true
       let queryItems: [URLQueryItem]  = [.init(name: "api-version", value: apiVersion)]
-      let request = try await AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
+      let request = try AzureOpenAIAPI.chat(deploymentID: parameters.model).request(
          apiKey: apiKey,
          organizationID: nil,
          method: .post,
@@ -250,6 +250,28 @@ final public class DefaultOpenAIAzureService: OpenAIService {
    }
    
    public func listRunSteps(threadID: String, runID: String, limit: Int?, order: String?, after: String?, before: String?) async throws -> OpenAIResponse<RunStepObject> {
+      fatalError("Currently, this API is not supported. We welcome and encourage contributions to our open-source project. Please consider opening an issue or submitting a pull request to add support for this feature.")
+   }
+   
+   public func createThreadAndRunStream(
+      parameters: CreateThreadAndRunParameter)
+   async throws -> AsyncThrowingStream<AssistantStreamEvent, Error> {
+      fatalError("Currently, this API is not supported. We welcome and encourage contributions to our open-source project. Please consider opening an issue or submitting a pull request to add support for this feature.")
+   }
+   
+   public func createRunStream(
+      threadID: String,
+      parameters: RunParameter)
+      async throws -> AsyncThrowingStream<AssistantStreamEvent, Error>
+   {
+      fatalError("Currently, this API is not supported. We welcome and encourage contributions to our open-source project. Please consider opening an issue or submitting a pull request to add support for this feature.")
+   }
+   
+   public func submitToolOutputsToRunStream(
+      threadID: String,
+      runID: String,
+      parameters: RunToolsOutputParameter)
+   async throws -> AsyncThrowingStream<AssistantStreamEvent, Error> {
       fatalError("Currently, this API is not supported. We welcome and encourage contributions to our open-source project. Please consider opening an issue or submitting a pull request to add support for this feature.")
    }
 }
