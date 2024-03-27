@@ -31,7 +31,10 @@ struct DefaultOpenAIService: OpenAIService {
       self.apiKey = .bearer(apiKey)
       self.organizationID = organizationID
    }
-   
+
+    init(
+    aiproxy)
+
    // MARK: Audio
    
    func createTranscription(

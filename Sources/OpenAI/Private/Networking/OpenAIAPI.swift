@@ -115,11 +115,11 @@ enum OpenAIAPI {
 
 extension OpenAIAPI: Endpoint {
    
-   var base: String {
-      // "https://api.openai.com"
-       "https://api.aiproxy.pro"
-   }
-   
+    // TOMORROW, come back to this, quickly do one PR that touches as few lines as possible
+    // THEN do another PR that decouples as much as possible
+    //
+    // Alternatively, see the precedent set by Azure
+
    var path: String {
       switch self {
       case .assistant(let category):

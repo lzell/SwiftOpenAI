@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0D8C297D2BAB464900E1F588 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0D8C297C2BAB464900E1F588 /* SwiftOpenAI */; };
+		0D8C29872BB2852B00E1F588 /* AIProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8C29862BB2852B00E1F588 /* AIProxy.swift */; };
 		7B1268052B08246400400694 /* AssistantConfigurationDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1268042B08246400400694 /* AssistantConfigurationDemoView.swift */; };
 		7B1268072B08247C00400694 /* AssistantConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1268062B08247C00400694 /* AssistantConfigurationProvider.swift */; };
 		7B436B962AE24A04003CE281 /* OptionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B436B952AE24A04003CE281 /* OptionsListView.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D8C29862BB2852B00E1F588 /* AIProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProxy.swift; sourceTree = "<group>"; };
 		7B1268042B08246400400694 /* AssistantConfigurationDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantConfigurationDemoView.swift; sourceTree = "<group>"; };
 		7B1268062B08247C00400694 /* AssistantConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantConfigurationProvider.swift; sourceTree = "<group>"; };
 		7B436B952AE24A04003CE281 /* OptionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsListView.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				7B436B9C2AE2515C003CE281 /* Resources */,
 				7B436B972AE25045003CE281 /* Utilities */,
 				7BBE7E922AFCC9300096A693 /* Vision */,
+				0D8C29862BB2852B00E1F588 /* AIProxy.swift */,
 				7BA788CE2AE23A48008825D5 /* ApiKeyIntroView.swift */,
 				7B436B952AE24A04003CE281 /* OptionsListView.swift */,
 				7BA788D02AE23A49008825D5 /* Assets.xcassets */,
@@ -454,6 +457,7 @@
 				7B436BB72AE7A2EA003CE281 /* ImagesProvider.swift in Sources */,
 				7B436B962AE24A04003CE281 /* OptionsListView.swift in Sources */,
 				7BBE7EDE2B03718E0096A693 /* ChatFunctionCallProvider.swift in Sources */,
+				0D8C29872BB2852B00E1F588 /* AIProxy.swift in Sources */,
 				7B7239A62AF628F800646679 /* ChatDisplayMessageView.swift in Sources */,
 				7B7239A02AF625F200646679 /* ChatFluidConversationProvider.swift in Sources */,
 				7BA788CF2AE23A48008825D5 /* ApiKeyIntroView.swift in Sources */,
