@@ -1,11 +1,18 @@
 //
-//  Endpoint.swift
+//  Endpoint+AIProxy.swift
 //
 //
-//  Created by James Rochabrun on 10/11/23.
+//  Created by Lou Zell on 3/26/24.
 //
 
 import Foundation
+import OSLog
+import DeviceCheck
+import UIKit
+
+private let aiproxyLogger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "UnknownApp",
+                                   category: "SwiftOpenAI+AIProxy")
+
 
 // MARK: Endpoint+AIProxy
 
@@ -31,7 +38,7 @@ extension Endpoint {
       queryItems: [URLQueryItem] = [],
       betaHeaderField: String? = nil,
       deviceCheckBypass: String? = nil)
-      throws -> URLRequest
+      async throws -> URLRequest
    {
       var request = URLRequest(url: urlComponents(queryItems: queryItems).url!)
       request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -41,6 +48,12 @@ extension Endpoint {
       }
       if let betaHeaderField {
          request.addValue(betaHeaderField, forHTTPHeaderField: "OpenAI-Beta")
+      }
+      if let vendorID = getVendorID() {
+          request.addValue(vendorID, forHTTPHeaderField: "aiproxy-vendor-id")
+      }
+      if let deviceCheckToken = await getDeviceCheckToken() {
+          request.addValue(deviceCheckToken, forHTTPHeaderField: "aiproxy-devicecheck")
       }
 #if DEBUG && targetEnvironment(simulator)
       if let deviceCheckBypass = deviceCheckBypass {
@@ -61,7 +74,7 @@ extension Endpoint {
       params: MultipartFormDataParameters,
       queryItems: [URLQueryItem] = [],
       deviceCheckBypass: String? = nil)
-      throws -> URLRequest
+      async throws -> URLRequest
    {
       var request = URLRequest(url: urlComponents(queryItems: queryItems).url!)
       request.httpMethod = method.rawValue
@@ -69,6 +82,12 @@ extension Endpoint {
       request.addValue(aiproxyPartialKey, forHTTPHeaderField: "aiproxy-partial-key")
       if let organizationID {
          request.addValue(organizationID, forHTTPHeaderField: "OpenAI-Organization")
+      }
+      if let vendorID = getVendorID() {
+          request.addValue(vendorID, forHTTPHeaderField: "aiproxy-vendor-id")
+      }
+      if let deviceCheckToken = await getDeviceCheckToken() {
+          request.addValue(deviceCheckToken, forHTTPHeaderField: "aiproxy-devicecheck")
       }
       request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 #if DEBUG && targetEnvironment(simulator)
@@ -79,4 +98,31 @@ extension Endpoint {
       request.httpBody = params.encode(boundary: boundary)
       return request
    }
+}
+
+
+// MARK: - Private Helpers
+
+/// Gets a device check token for use in your calls to aiproxy.
+/// The device token may be nil when targeting the iOS simulator.
+/// See the usage instructions at the top of this file, and ensure that you are conditionally compiling the `deviceCheckBypass` token for iOS simulation only.
+/// Do not let the `deviceCheckBypass` token slip into your production codebase, or an attacker can easily use it themselves.
+private func getDeviceCheckToken() async -> String? {
+    guard DCDevice.current.isSupported else {
+        aiproxyLogger.error("DeviceCheck is not available on this device. Are you on the simulator?")
+        return nil
+    }
+
+    do {
+        let data = try await DCDevice.current.generateToken()
+        return data.base64EncodedString()
+    } catch {
+        aiproxyLogger.error("Could not create DeviceCheck token. Are you using an explicit bundle identifier?")
+        return nil
+    }
+}
+
+/// Get a unique ID for this user (scoped to the current vendor, and not personally identifiable):
+private func getVendorID() -> String? {
+    return UIDevice.current.identifierForVendor?.uuidString
 }
