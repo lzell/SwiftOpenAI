@@ -112,8 +112,8 @@ enum OpenAIAPI {
 }
 
 
-extension OpenAIAPI {
-   
+extension OpenAIAPI: Endpoint {
+
    var path: String {
       switch self {
       case .assistant(let category):

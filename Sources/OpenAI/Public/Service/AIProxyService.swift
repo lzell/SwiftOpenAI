@@ -11,24 +11,24 @@ struct AIProxyService: OpenAIService {
 
    let session: URLSession
    let decoder: JSONDecoder
-   
+   var deviceCheckBypass: String?
+
    private let sessionID = UUID().uuidString
-   /// [authentication](https://platform.openai.com/docs/api-reference/authentication)
-   private let apiKey: Authorization
+   private let partialKey: String
    /// [organization](https://platform.openai.com/docs/api-reference/organization-optional)
    private let organizationID: String?
    
    private static let assistantsBeta = "assistants=v1"
    
    init(
-      apiKey: String,
+      partialKey: String,
       organizationID: String? = nil,
       configuration: URLSessionConfiguration = .default,
       decoder: JSONDecoder = .init())
    {
       self.session = URLSession(configuration: configuration)
       self.decoder = decoder
-      self.apiKey = .bearer(apiKey)
+      self.partialKey = partialKey
       self.organizationID = organizationID
    }
    
@@ -38,7 +38,7 @@ struct AIProxyService: OpenAIService {
       parameters: AudioTranscriptionParameters)
       async throws -> AudioObject
    {
-      let request = try OpenAIAPI.audio(.transcriptions).multiPartRequest(apiKey: apiKey, organizationID: organizationID, method: .post,  params: parameters)
+       let request = try OpenAIAPI.audio(.transcriptions).multiPartRequest(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post,  params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AudioObject.self, with: request)
    }
    
@@ -46,7 +46,7 @@ struct AIProxyService: OpenAIService {
       parameters: AudioTranslationParameters)
       async throws -> AudioObject
    {
-      let request = try OpenAIAPI.audio(.translations).multiPartRequest(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.audio(.translations).multiPartRequest(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AudioObject.self, with: request)
    }
    
@@ -54,7 +54,7 @@ struct AIProxyService: OpenAIService {
       parameters: AudioSpeechParameters)
       async throws -> AudioSpeechObject
    {
-      let request = try OpenAIAPI.audio(.speech).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.audio(.speech).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       let data = try await fetchAudio(with: request)
       return AudioSpeechObject(output: data)
    }
@@ -67,7 +67,7 @@ struct AIProxyService: OpenAIService {
    {
       var chatParameters = parameters
       chatParameters.stream = false
-      let request = try OpenAIAPI.chat.requestX(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
+      let request = try OpenAIAPI.chat.request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: chatParameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ChatCompletionObject.self, with: request)
    }
    
@@ -77,7 +77,7 @@ struct AIProxyService: OpenAIService {
    {
       var chatParameters = parameters
       chatParameters.stream = true
-      let request = try OpenAIAPI.chat.requestX(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
+      let request = try OpenAIAPI.chat.request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: chatParameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetchStream(type: ChatCompletionChunkObject.self, with: request)
    }
    
@@ -87,7 +87,7 @@ struct AIProxyService: OpenAIService {
       parameters: EmbeddingParameter)
       async throws -> OpenAIResponse<EmbeddingObject>
    {
-      let request = try OpenAIAPI.embeddings.request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.embeddings.request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<EmbeddingObject>.self, with: request)
    }
    
@@ -97,7 +97,7 @@ struct AIProxyService: OpenAIService {
       parameters: FineTuningJobParameters)
       async throws -> FineTuningJobObject
    {
-      let request = try OpenAIAPI.fineTuning(.create).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.fineTuning(.create).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: FineTuningJobObject.self, with: request)
    }
    
@@ -115,7 +115,7 @@ struct AIProxyService: OpenAIService {
          queryItems = [.init(name: "limit", value: "\(limit)")]
       }
       
-      let request = try OpenAIAPI.fineTuning(.list).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems)
+      let request = try OpenAIAPI.fineTuning(.list).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<FineTuningJobObject>.self, with: request)
    }
    
@@ -123,7 +123,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> FineTuningJobObject
    {
-      let request = try OpenAIAPI.fineTuning(.retrieve(jobID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get)
+      let request = try OpenAIAPI.fineTuning(.retrieve(jobID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: FineTuningJobObject.self, with: request)
    }
    
@@ -131,7 +131,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> FineTuningJobObject
    {
-      let request = try OpenAIAPI.fineTuning(.cancel(jobID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .post)
+      let request = try OpenAIAPI.fineTuning(.cancel(jobID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: FineTuningJobObject.self, with: request)
    }
    
@@ -149,7 +149,7 @@ struct AIProxyService: OpenAIService {
       } else if let limit {
          queryItems = [.init(name: "limit", value: "\(limit)")]
       }
-      let request = try OpenAIAPI.fineTuning(.events(jobID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems)
+      let request = try OpenAIAPI.fineTuning(.events(jobID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<FineTuningJobEventObject>.self, with: request)
    }
    
@@ -158,7 +158,7 @@ struct AIProxyService: OpenAIService {
    func listFiles()
       async throws -> OpenAIResponse<FileObject>
    {
-      let request = try OpenAIAPI.file(.list).request(apiKey: apiKey, organizationID: organizationID, method: .get)
+      let request = try OpenAIAPI.file(.list).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<FileObject>.self, with: request)
    }
    
@@ -166,7 +166,7 @@ struct AIProxyService: OpenAIService {
       parameters: FileParameters)
       async throws -> FileObject
    {
-      let request = try OpenAIAPI.file(.upload).multiPartRequest(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.file(.upload).multiPartRequest(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: FileObject.self, with: request)
    }
    
@@ -174,7 +174,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> FileObject.DeletionStatus
    {
-      let request = try OpenAIAPI.file(.delete(fileID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .delete)
+      let request = try OpenAIAPI.file(.delete(fileID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .delete, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: FileObject.DeletionStatus.self, with: request)
    }
    
@@ -182,7 +182,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> FileObject
    {
-      let request = try OpenAIAPI.file(.retrieve(fileID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get)
+      let request = try OpenAIAPI.file(.retrieve(fileID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: FileObject.self, with: request)
    }
    
@@ -190,7 +190,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> [[String: Any]]
    {
-      let request = try OpenAIAPI.file(.retrieveFileContent(fileID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get)
+      let request = try OpenAIAPI.file(.retrieveFileContent(fileID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, deviceCheckBypass: deviceCheckBypass)
       return try await fetchContentsOfFile(request: request)
    }
    
@@ -200,7 +200,7 @@ struct AIProxyService: OpenAIService {
       parameters: ImageCreateParameters)
       async throws -> OpenAIResponse<ImageObject>
    {
-      let request = try OpenAIAPI.images(.generations).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.images(.generations).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<ImageObject>.self,  with: request)
    }
    
@@ -208,7 +208,7 @@ struct AIProxyService: OpenAIService {
       parameters: ImageEditParameters)
       async throws -> OpenAIResponse<ImageObject>
    {
-      let request = try OpenAIAPI.images(.edits).multiPartRequest(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.images(.edits).multiPartRequest(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<ImageObject>.self, with: request)
    }
    
@@ -216,7 +216,7 @@ struct AIProxyService: OpenAIService {
       parameters: ImageVariationParameters)
       async throws -> OpenAIResponse<ImageObject>
    {
-      let request = try OpenAIAPI.images(.variations).multiPartRequest(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.images(.variations).multiPartRequest(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<ImageObject>.self, with: request)
    }
    
@@ -225,7 +225,7 @@ struct AIProxyService: OpenAIService {
    func listModels()
       async throws -> OpenAIResponse<ModelObject>
    {
-      let request = try OpenAIAPI.model(.list).request(apiKey: apiKey, organizationID: organizationID, method: .get)
+      let request = try OpenAIAPI.model(.list).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<ModelObject>.self,  with: request)
    }
    
@@ -233,7 +233,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> ModelObject
    {
-      let request = try OpenAIAPI.model(.retrieve(modelID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get)
+      let request = try OpenAIAPI.model(.retrieve(modelID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ModelObject.self,  with: request)
    }
    
@@ -241,7 +241,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> ModelObject.DeletionStatus
    {
-      let request = try OpenAIAPI.model(.deleteFineTuneModel(modelID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .delete)
+      let request = try OpenAIAPI.model(.deleteFineTuneModel(modelID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .delete, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ModelObject.DeletionStatus.self,  with: request)
    }
    
@@ -251,7 +251,7 @@ struct AIProxyService: OpenAIService {
       parameters: ModerationParameter<String>)
       async throws -> ModerationObject
    {
-      let request = try OpenAIAPI.moderations.request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.moderations.request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ModerationObject.self, with: request)
    }
    
@@ -259,7 +259,7 @@ struct AIProxyService: OpenAIService {
       parameters: ModerationParameter<[String]>)
       async throws -> ModerationObject
    {
-      let request = try OpenAIAPI.moderations.request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.moderations.request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ModerationObject.self, with: request)
    }
    
@@ -269,7 +269,7 @@ struct AIProxyService: OpenAIService {
       parameters: AssistantParameters)
       async throws -> AssistantObject
    {
-      let request = try OpenAIAPI.assistant(.create).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistant(.create).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantObject.self, with: request)
    }
    
@@ -277,7 +277,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> AssistantObject
    {
-      let request = try OpenAIAPI.assistant(.retrieve(assistantID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistant(.retrieve(assistantID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantObject.self, with: request)
    }
    
@@ -286,7 +286,7 @@ struct AIProxyService: OpenAIService {
       parameters: AssistantParameters)
       async throws -> AssistantObject
    {
-      let request = try OpenAIAPI.assistant(.modify(assistantID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistant(.modify(assistantID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantObject.self, with: request)
    }
    
@@ -294,7 +294,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> AssistantObject.DeletionStatus
    {
-      let request = try OpenAIAPI.assistant(.delete(assistantID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .delete, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistant(.delete(assistantID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .delete, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantObject.DeletionStatus.self, with: request)
    }
    
@@ -318,7 +318,7 @@ struct AIProxyService: OpenAIService {
       if let before {
          queryItems.append(.init(name: "before", value: before))
       }
-      let request = try OpenAIAPI.assistant(.list).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistant(.list).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<AssistantObject>.self, with: request)
    }
    
@@ -329,7 +329,7 @@ struct AIProxyService: OpenAIService {
       parameters: AssistantFileParamaters)
       async throws -> AssistantFileObject
    {
-      let request = try OpenAIAPI.assistantFile(.create(assistantID: assistantID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistantFile(.create(assistantID: assistantID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantFileObject.self, with: request)
    }
    
@@ -338,7 +338,7 @@ struct AIProxyService: OpenAIService {
       fileID: String)
       async throws -> AssistantFileObject
    {
-      let request = try OpenAIAPI.assistantFile(.retrieve(assistantID: assistantID, fileID: fileID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistantFile(.retrieve(assistantID: assistantID, fileID: fileID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantFileObject.self, with: request)
    }
    
@@ -347,7 +347,7 @@ struct AIProxyService: OpenAIService {
       fileID: String)
       async throws -> AssistantFileObject.DeletionStatus
    {
-      let request = try OpenAIAPI.assistantFile(.delete(assistantID: assistantID, fileID: fileID)).request(apiKey: apiKey, organizationID: organizationID, method: .delete, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistantFile(.delete(assistantID: assistantID, fileID: fileID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .delete, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: AssistantFileObject.DeletionStatus.self, with: request)
    }
    
@@ -372,7 +372,7 @@ struct AIProxyService: OpenAIService {
       if let before {
          queryItems.append(.init(name: "before", value: before))
       }
-      let request = try OpenAIAPI.assistant(.list).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.assistant(.list).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<AssistantFileObject>.self, with: request)
    }
    
@@ -382,14 +382,14 @@ struct AIProxyService: OpenAIService {
       parameters: CreateThreadParameters)
       async throws -> ThreadObject
    {
-      let request = try OpenAIAPI.thread(.create).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.thread(.create).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ThreadObject.self, with: request)
    }
    
    func retrieveThread(id: String)
       async throws -> ThreadObject
    {
-      let request = try OpenAIAPI.thread(.retrieve(threadID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.thread(.retrieve(threadID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ThreadObject.self, with: request)
    }
    
@@ -398,7 +398,7 @@ struct AIProxyService: OpenAIService {
       parameters: ModifyThreadParameters)
       async throws -> ThreadObject
    {
-      let request = try OpenAIAPI.thread(.modify(threadID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.thread(.modify(threadID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ThreadObject.self, with: request)
    }
    
@@ -406,7 +406,7 @@ struct AIProxyService: OpenAIService {
       id: String)
       async throws -> ThreadObject.DeletionStatus
    {
-      let request = try OpenAIAPI.thread(.delete(threadID: id)).request(apiKey: apiKey, organizationID: organizationID, method: .delete, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.thread(.delete(threadID: id)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .delete, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: ThreadObject.DeletionStatus.self, with: request)
    }
    
@@ -417,7 +417,7 @@ struct AIProxyService: OpenAIService {
       parameters: MessageParameter)
       async throws -> MessageObject
    {
-      let request = try OpenAIAPI.message(.create(threadID: threadID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.message(.create(threadID: threadID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: MessageObject.self, with: request)
    }
    
@@ -426,7 +426,7 @@ struct AIProxyService: OpenAIService {
       messageID: String)
       async throws -> MessageObject
    {
-      let request = try OpenAIAPI.message(.retrieve(threadID: threadID, messageID: messageID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.message(.retrieve(threadID: threadID, messageID: messageID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: MessageObject.self, with: request)
    }
    
@@ -436,7 +436,7 @@ struct AIProxyService: OpenAIService {
       parameters: ModifyMessageParameters)
       async throws -> MessageObject
    {
-      let request = try OpenAIAPI.message(.modify(threadID: threadID, messageID: messageID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.message(.modify(threadID: threadID, messageID: messageID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: MessageObject.self, with: request)
    }
    
@@ -461,7 +461,7 @@ struct AIProxyService: OpenAIService {
       if let before {
          queryItems.append(.init(name: "before", value: before))
       }
-      let request = try OpenAIAPI.message(.list(threadID: threadID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.message(.list(threadID: threadID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<MessageObject>.self, with: request)
    }
    
@@ -473,7 +473,7 @@ struct AIProxyService: OpenAIService {
       fileID: String)
       async throws -> MessageFileObject
    {
-      let request = try OpenAIAPI.messageFile(.retrieve(threadID: threadID, messageID: messageID, fileID: fileID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.messageFile(.retrieve(threadID: threadID, messageID: messageID, fileID: fileID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: MessageFileObject.self, with: request)
    }
    
@@ -499,7 +499,7 @@ struct AIProxyService: OpenAIService {
       if let before {
          queryItems.append(.init(name: "before", value: before))
       }
-      let request = try OpenAIAPI.messageFile(.list(threadID: threadID, messageID: messageID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.messageFile(.list(threadID: threadID, messageID: messageID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<MessageFileObject>.self, with: request)
    }
    
@@ -508,7 +508,7 @@ struct AIProxyService: OpenAIService {
       parameters: RunParameter)
       async throws -> RunObject
    {
-      let request = try OpenAIAPI.run(.create(threadID: threadID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.create(threadID: threadID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunObject.self, with: request)
    }
    
@@ -517,7 +517,7 @@ struct AIProxyService: OpenAIService {
       runID: String)
       async throws -> RunObject
    {
-      let request = try OpenAIAPI.run(.retrieve(threadID: threadID, runID: runID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.retrieve(threadID: threadID, runID: runID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunObject.self, with: request)
    }
    
@@ -527,7 +527,7 @@ struct AIProxyService: OpenAIService {
       parameters: ModifyRunParameters)
       async throws -> RunObject
    {
-      let request = try OpenAIAPI.run(.modify(threadID: threadID, runID: runID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.modify(threadID: threadID, runID: runID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunObject.self, with: request)
    }
    
@@ -552,7 +552,7 @@ struct AIProxyService: OpenAIService {
       if let before {
          queryItems.append(.init(name: "before", value: before))
       }
-      let request = try OpenAIAPI.run(.list(threadID: threadID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.list(threadID: threadID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<RunObject>.self, with: request)
    }
    
@@ -561,7 +561,7 @@ struct AIProxyService: OpenAIService {
       runID: String)
       async throws -> RunObject
    {
-      let request = try OpenAIAPI.run(.cancel(threadID: threadID, runID: runID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.cancel(threadID: threadID, runID: runID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunObject.self, with: request)
    }
    
@@ -571,7 +571,7 @@ struct AIProxyService: OpenAIService {
       parameters: RunToolsOutputParameter)
       async throws -> RunObject
    {
-      let request = try OpenAIAPI.run(.submitToolOutput(threadID: threadID, runID: runID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.submitToolOutput(threadID: threadID, runID: runID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunObject.self, with: request)
    }
    
@@ -579,7 +579,7 @@ struct AIProxyService: OpenAIService {
       parameters: CreateThreadAndRunParameter)
       async throws -> RunObject
    {
-      let request = try OpenAIAPI.run(.createThreadAndRun).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.run(.createThreadAndRun).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunObject.self, with: request)
    }
    
@@ -591,7 +591,7 @@ struct AIProxyService: OpenAIService {
       stepID: String)
       async throws -> RunStepObject
    {
-      let request = try OpenAIAPI.runStep(.retrieve(threadID: threadID, runID: runID, stepID: stepID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.runStep(.retrieve(threadID: threadID, runID: runID, stepID: stepID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: RunStepObject.self, with: request)
    }
    
@@ -617,7 +617,7 @@ struct AIProxyService: OpenAIService {
       if let before {
          queryItems.append(.init(name: "before", value: before))
       }
-      let request = try OpenAIAPI.runStep(.list(threadID: threadID, runID: runID)).request(apiKey: apiKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.runStep(.list(threadID: threadID, runID: runID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .get, queryItems: queryItems, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetch(type: OpenAIResponse<RunStepObject>.self, with: request)
    }
    
@@ -628,7 +628,7 @@ struct AIProxyService: OpenAIService {
    {
       var runParameters = parameters
       runParameters.stream = true
-      let request = try OpenAIAPI.run(.create(threadID: threadID)).requestX(apiKey: apiKey, organizationID: organizationID, method: .post, params: runParameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.create(threadID: threadID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: runParameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetchAssistantStreamEvents(with: request)
    }
    
@@ -637,7 +637,7 @@ struct AIProxyService: OpenAIService {
       async throws -> AsyncThrowingStream<AssistantStreamEvent, Error> {
       var runParameters = parameters
       runParameters.stream = true
-      let request = try OpenAIAPI.run(.createThreadAndRun).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters)
+      let request = try OpenAIAPI.run(.createThreadAndRun).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, deviceCheckBypass: deviceCheckBypass)
       return try await fetchAssistantStreamEvents(with: request)
    }
    
@@ -649,7 +649,7 @@ struct AIProxyService: OpenAIService {
    {
       var runToolsOutputParameter = parameters
       runToolsOutputParameter.stream = true
-      let request = try OpenAIAPI.run(.submitToolOutput(threadID: threadID, runID: runID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.submitToolOutput(threadID: threadID, runID: runID)).request(aiproxyPartialKey: partialKey, organizationID: organizationID, method: .post, params: parameters, betaHeaderField: Self.assistantsBeta, deviceCheckBypass: deviceCheckBypass)
       return try await fetchAssistantStreamEvents(with: request)
    }
 }

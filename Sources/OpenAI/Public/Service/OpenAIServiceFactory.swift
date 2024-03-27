@@ -25,11 +25,13 @@ public class OpenAIServiceFactory {
       decoder: JSONDecoder = .init())
       -> some OpenAIService
    {
-      AIProxyService(
-         apiKey: apiKey,
-         organizationID: organizationID,
-         configuration: configuration,
-         decoder: decoder)
+      var service = AIProxyService(
+         partialKey: "v1|073a78af|9|9x8SNKe00tveUCeg"
+      )
+      #if DEBUG && targetEnvironment(simulator)
+      service.deviceCheckBypass = "ebf426a1-958b-4c1f-a911-115187116b0b"
+      #endif
+      return service
    }
    
    /// Creates and returns an instance of `OpenAIService`.

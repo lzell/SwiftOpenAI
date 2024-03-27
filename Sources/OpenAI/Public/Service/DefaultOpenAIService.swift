@@ -653,11 +653,3 @@ struct DefaultOpenAIService: OpenAIService {
       return try await fetchAssistantStreamEvents(with: request)
    }
 }
-
-extension OpenAIAPI: Endpoint {
-
-    var base: String {
-        "https://api.openai.com"
-    }
-}
-

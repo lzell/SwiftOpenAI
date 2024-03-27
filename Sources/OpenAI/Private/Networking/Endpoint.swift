@@ -27,6 +27,12 @@ protocol Endpoint {
 
 extension Endpoint {
 
+   /// The default endpoint base.
+   /// Conformers of Endpoint can provide their own override, which is called a 'customization point' since `base` is included in the Endpoint protocol definition 
+   var base: String {
+      "https://api.openai.com"
+   }
+
    private func urlComponents(
       queryItems: [URLQueryItem])
       -> URLComponents
