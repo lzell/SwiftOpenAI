@@ -111,13 +111,8 @@ enum OpenAIAPI {
    }
 }
 
-// MARK: OpenAIAPI+Endpoint
 
-extension OpenAIAPI: Endpoint {
-   
-   var base: String {
-      "https://api.openai.com"
-   }
+extension OpenAIAPI {
    
    var path: String {
       switch self {

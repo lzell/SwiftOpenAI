@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct DefaultOpenAIService: OpenAIService {
-   
+struct AIProxyService: OpenAIService {
+
    let session: URLSession
    let decoder: JSONDecoder
    
@@ -67,7 +67,7 @@ struct DefaultOpenAIService: OpenAIService {
    {
       var chatParameters = parameters
       chatParameters.stream = false
-      let request = try OpenAIAPI.chat.request(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
+      let request = try OpenAIAPI.chat.requestX(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
       return try await fetch(type: ChatCompletionObject.self, with: request)
    }
    
@@ -77,7 +77,7 @@ struct DefaultOpenAIService: OpenAIService {
    {
       var chatParameters = parameters
       chatParameters.stream = true
-      let request = try OpenAIAPI.chat.request(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
+      let request = try OpenAIAPI.chat.requestX(apiKey: apiKey, organizationID: organizationID, method: .post, params: chatParameters)
       return try await fetchStream(type: ChatCompletionChunkObject.self, with: request)
    }
    
@@ -628,7 +628,7 @@ struct DefaultOpenAIService: OpenAIService {
    {
       var runParameters = parameters
       runParameters.stream = true
-      let request = try OpenAIAPI.run(.create(threadID: threadID)).request(apiKey: apiKey, organizationID: organizationID, method: .post, params: runParameters, betaHeaderField: Self.assistantsBeta)
+      let request = try OpenAIAPI.run(.create(threadID: threadID)).requestX(apiKey: apiKey, organizationID: organizationID, method: .post, params: runParameters, betaHeaderField: Self.assistantsBeta)
       return try await fetchAssistantStreamEvents(with: request)
    }
    
@@ -654,10 +654,4 @@ struct DefaultOpenAIService: OpenAIService {
    }
 }
 
-extension OpenAIAPI: Endpoint {
-
-    var base: String {
-        "https://api.openai.com"
-    }
-}
 

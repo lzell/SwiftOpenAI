@@ -25,7 +25,7 @@ public class OpenAIServiceFactory {
       decoder: JSONDecoder = .init())
       -> some OpenAIService
    {
-      DefaultOpenAIService(
+      AIProxyService(
          apiKey: apiKey,
          organizationID: organizationID,
          configuration: configuration,
